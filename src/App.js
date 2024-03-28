@@ -16,7 +16,6 @@ function App() {
   onAuthStateChanged(auth, (currentUser) => {
     setUser(currentUser ? currentUser : {});
   });
-  
   const register = async () => {
     try{
     const user = await createUserWithEmailAndPassword(auth, registerEmail,registerPassword)
@@ -26,7 +25,6 @@ function App() {
       console.log(error.message);
     }
   }
-
   const login = async () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
@@ -35,10 +33,8 @@ function App() {
       console.log(error.message);
     }
   }
-
   const logout = async () => {    
   }
-
   return (
     <BrowserRouter>
       <div className='flex w-full h-screen'>
@@ -68,5 +64,4 @@ function App() {
     </BrowserRouter>
   );
 }
-
 export default App;

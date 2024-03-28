@@ -11,16 +11,13 @@ export const LoginForm = ({loginEmail, loginPassword, setLoginEmail,setLoginPass
     };
 
     const handleSignin = async () => {
-
         await login();
-    
         navigate('/home');
     };
 
   return (
     <div>
     <h1 className=' px-10 py-8 text-2xl font-semibold'>Sign in to your account</h1>
-
     <div className='bg-white px-10 py-10'>
     {/* <h1 className='text-3xl font-semibold'>Sign in to your account</h1> */}
         <div>
@@ -51,14 +48,6 @@ export const LoginForm = ({loginEmail, loginPassword, setLoginEmail,setLoginPass
              <button onClick={handleRegister} className='font-bold text-sm text-indigo-600'>Register</button>
              </p>
         </div>
-        {/* <div>
-            <p className='mt-6 flex justify-center items-center'>Or continue with </p>
-        </div> */}
-        {/* <div>
-            <button className='mt-4 flex justify-center items-center'>
-            <FontAwesomeIcon icon={faGoogle} />
-            </button>
-        </div> */}
     </div>
     </div>
   )
