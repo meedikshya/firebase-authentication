@@ -18,7 +18,6 @@ function App() {
   });
   
   const register = async () => {
-    // Implementation for registering a user
     try{
     const user = await createUserWithEmailAndPassword(auth, registerEmail,registerPassword)
     console.log(user);
