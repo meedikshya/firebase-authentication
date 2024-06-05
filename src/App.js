@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import { LoginForm } from './components/loginForm';
 import { RegisterForm } from './components/RegisterForm';
 import { Home } from './components/home';
@@ -54,7 +54,7 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <div className='flex w-full h-screen'>
         <div className='w-full flex items-center justify-center lg:w-1.5/2'>
           <Routes>
@@ -77,7 +77,7 @@ function App() {
         </div>
         <ToastContainer />
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
