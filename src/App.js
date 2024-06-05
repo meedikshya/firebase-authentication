@@ -1,40 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { LoginForm } from './components/loginForm';
 import { RegisterForm } from './components/RegisterForm';
 import { Home } from './components/home';
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword} from "firebase/auth";
-import {auth} from './firebase-config';
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from './firebase-config';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
 
-  onAuthStateChanged(auth, (currentUser) => {
-    setUser(currentUser ? currentUser : {});
-  });
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser ? currentUser : null);
+    });
+    return () => unsubscribe();
+  }, []);
+
   const register = async () => {
-    try{
-    const user = await createUserWithEmailAndPassword(auth, registerEmail,registerPassword)
-    console.log(user);
-    }
-    catch (error){
-      console.log(error.message);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, registerEmail, registerPassword);
+      setUser(userCredential.user);
+      return true;
+    } catch (error) {
+      toast.error(error.message);
+      return false;
     }
   }
+
   const login = async () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
       setUser(userCredential.user);
+      return true;
     } catch (error) {
-      console.log(error.message);
+      toast.error("Invalid email or password");
+      return false;
     }
   }
-  const logout = async () => {    
+
+  const logout = async () => {
+    try {
+      await auth.signOut();
+      setUser(null);
+    } catch (error) {
+      toast.error(error.message);
+    }
   }
+
   return (
     <BrowserRouter>
       <div className='flex w-full h-screen'>
@@ -45,8 +63,7 @@ function App() {
               loginPassword={loginPassword}
               setLoginEmail={setLoginEmail}
               setLoginPassword={setLoginPassword}
-              register={register}
-              login = {login}
+              login={login}
             />} />
             <Route path="/register" element={<RegisterForm
               registerEmail={registerEmail}
@@ -55,13 +72,13 @@ function App() {
               setRegisterPassword={setRegisterPassword}
               register={register}
             />} />
-            <Route path='home' element={<Home
-              user={user}
-             />} />
+            <Route path="/home" element={<Home user={user} />} />
           </Routes>
         </div>
+        <ToastContainer />
       </div>
     </BrowserRouter>
   );
 }
+
 export default App;
